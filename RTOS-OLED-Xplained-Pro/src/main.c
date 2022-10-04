@@ -151,6 +151,9 @@ void apaga_tela() {
 /************************************************************************/
 
 static void task_modo(void *pvParameters) { 
+	
+		io_init();
+		gfx_mono_ssd1306_init();
  	int16_t inc = 0;
   for (;;) {
     if (xQueueReceive(xQueueModo, &inc, 10)) {
@@ -159,33 +162,63 @@ static void task_modo(void *pvParameters) {
 
 		if(graus == 180){
 			apaga_tela();
-			gfx_mono_draw_string("180", 50, 12, &sysfont);
-			xQueueSendFromISR(xQueueSteps, &passos, 0);}
+			xQueueSendFromISR(xQueueSteps, &passos, 0);
+			gfx_mono_draw_string("180", 50, 12, &sysfont);}
 		if(graus == 45){
 			apaga_tela();
-			gfx_mono_draw_string("45", 50, 12, &sysfont);
-			xQueueSendFromISR(xQueueSteps, &passos, 0);}
-
+			xQueueSendFromISR(xQueueSteps, &passos, 0);
+			gfx_mono_draw_string("45", 50, 12, &sysfont);}
 	 	if(graus == 90){
 			apaga_tela();
+			xQueueSendFromISR(xQueueSteps, &passos, 0);
 			gfx_mono_draw_string("90", 50, 12, &sysfont);
-			xQueueSendFromISR(xQueueSteps, &passos, 0);}
+		 }
     } 
 }
 }
 
 static void task_motor(void *pvParameters) { 
- 	int16_t passos = 0;
+ 	int16_t passos1 = 0;
   for (;;) {
-    if (xQueueReceive(xQueueSteps, &passos, 10)) {
-      int passos = passos;
-	//   RTT_init(1, 5000000, RTT_MR_ALMIEN);
-	//   for (int i = 0; i < passos; i++) {
-    // 	if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {			
-    // } 
-// }
-}}
+	if (xQueueReceive(xQueueSteps, &passos1, 10)) {
+    	int passos = passos1;
+		RTT_init(1000, 5, RTT_MR_ALMIEN);
+		for (int i = 0; i < passos; i++) {
+			// pio_set(IN_1_PIO, IN_1_IDX_MASK);
+			// delay_ms(50);
+			// pio_clear(IN_1_PIO, IN_1_IDX_MASK);
+			// pio_set(IN_2_PIO, IN_2_IDX_MASK);
+			// delay_ms(50);
+			// pio_clear(IN_2_PIO, IN_2_IDX_MASK);
+			// pio_set(IN_3_PIO, IN_3_IDX_MASK);
+			// delay_ms(50);
+			// pio_clear(IN_3_PIO, IN_3_IDX_MASK);
+			// pio_set(IN_4_PIO, IN_4_IDX_MASK);
+			// delay_ms(50);
+			// pio_clear(IN_4_PIO,IN_4_IDX_MASK);
+
+			if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
+				pio_set(IN_1_PIO, IN_1_IDX_MASK);	
+				if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
+					pio_clear(IN_1_PIO, IN_1_IDX_MASK);	
+					pio_set(IN_2_PIO, IN_2_IDX_MASK);
+					if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
+						pio_clear(IN_2_PIO, IN_2_IDX_MASK);
+						pio_set(IN_3_PIO, IN_3_IDX_MASK);
+						if(xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
+							pio_clear(IN_3_PIO, IN_3_IDX_MASK);
+							pio_set(IN_4_PIO, IN_4_IDX_MASK);
+							if(xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
+								pio_clear(IN_4_PIO, IN_4_IDX_MASK);
+							}
+						}
+					
+     } 
 }
+}}
+
+}}}
+
 
 /************************************************************************/
 /* funcoes                                                              */
@@ -235,6 +268,13 @@ void io_init(void) {
   pio_get_interrupt_status(BUT_2_PIO);
   pio_get_interrupt_status(BUT_3_PIO);
 
+  pio_clear(IN_1_PIO, IN_1_IDX_MASK); // coloca pino em 0
+  pio_clear(IN_2_PIO, IN_2_IDX_MASK); // coloca pino em 0
+  pio_clear(IN_3_PIO, IN_3_IDX_MASK); // coloca pino em 0
+  pio_clear(IN_4_PIO, IN_4_IDX_MASK); // coloca pino em 0
+ // coloca pino em 0
+
+
   NVIC_EnableIRQ(BUT_1_PIO_ID);
   NVIC_SetPriority(BUT_1_PIO_ID, 4);
 
@@ -254,13 +294,12 @@ int main(void) {
 	/* Initialize the SAM system */
 	sysclk_init();
 	board_init();
-	io_init();
-	gfx_mono_ssd1306_init();
+
 
 	/* Initialize the console uart */
 	configure_console();
     xQueueModo = xQueueCreate(32, sizeof(int16_t));
-	xQueueSteps = xQueueCreate(32, sizeof(uint32_t));
+	xQueueSteps = xQueueCreate(32, sizeof(uint16_t));
 	xSemaphoreRTT = xSemaphoreCreateBinary();
 
 	/* Create task to control oled */
