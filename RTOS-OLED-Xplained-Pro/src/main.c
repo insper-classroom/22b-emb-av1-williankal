@@ -164,20 +164,17 @@ static void task_modo(void *pvParameters) {
 			apaga_tela();
 			gfx_mono_draw_string("180", 50, 12, &sysfont);
 
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-			break;}
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
 		if(graus == 45){
 			apaga_tela();			
 			gfx_mono_draw_string("45", 50, 12, &sysfont);
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-			break;}
-	
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
 
 	 	if(graus == 90){
 			apaga_tela();
 			gfx_mono_draw_string("90", 50, 12, &sysfont);
 			xQueueSendFromISR(xQueueSteps, &passos, 0);
-			break;
+
 
 		 }
     } 

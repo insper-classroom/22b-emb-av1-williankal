@@ -23,19 +23,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000051e1  00000000  00000000  00046995  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000b26a  00000000  00000000  0004bb76  2**0
+ 10 .debug_loc    0000b252  00000000  00000000  0004bb76  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_aranges 00001058  00000000  00000000  00056de0  2**0
+ 11 .debug_aranges 00001058  00000000  00000000  00056dc8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000011f0  00000000  00000000  00057e38  2**0
+ 12 .debug_ranges 000011e8  00000000  00000000  00057e20  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000efac  00000000  00000000  00059028  2**0
+ 13 .debug_macro  0000efac  00000000  00000000  00059008  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   00017233  00000000  00000000  00067fd4  2**0
+ 14 .debug_line   0001722e  00000000  00000000  00067fb4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    000965c0  00000000  00000000  0007f207  2**0
+ 15 .debug_str    000965c0  00000000  00000000  0007f1e2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00003458  00000000  00000000  001157c8  2**2
+ 16 .debug_frame  00003454  00000000  00000000  001157a4  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -8050,8 +8050,8 @@ void io_init(void) {
 
 00403398 <task_modo>:
 static void task_modo(void *pvParameters) { 
-  403398:	b570      	push	{r4, r5, r6, lr}
-  40339a:	b082      	sub	sp, #8
+  403398:	b5f0      	push	{r4, r5, r6, r7, lr}
+  40339a:	b083      	sub	sp, #12
 		io_init();
   40339c:	4b25      	ldr	r3, [pc, #148]	; (403434 <task_modo+0x9c>)
   40339e:	4798      	blx	r3
@@ -8066,88 +8066,85 @@ static void task_modo(void *pvParameters) {
   4033ac:	4c24      	ldr	r4, [pc, #144]	; (403440 <task_modo+0xa8>)
 	  int passos = (graus / 0,17578125);
   4033ae:	4e25      	ldr	r6, [pc, #148]	; (403444 <task_modo+0xac>)
-    if (xQueueReceive(xQueueModo, &inc, 10)) {
-  4033b0:	2300      	movs	r3, #0
-  4033b2:	220a      	movs	r2, #10
-  4033b4:	f10d 0106 	add.w	r1, sp, #6
-  4033b8:	6828      	ldr	r0, [r5, #0]
-  4033ba:	47a0      	blx	r4
-  4033bc:	2800      	cmp	r0, #0
-  4033be:	d0f7      	beq.n	4033b0 <task_modo+0x18>
-      int graus = inc;
-  4033c0:	f9bd 3006 	ldrsh.w	r3, [sp, #6]
-	  int passos = (graus / 0,17578125);
-  4033c4:	9600      	str	r6, [sp, #0]
-		if(graus == 180){
-  4033c6:	2bb4      	cmp	r3, #180	; 0xb4
-  4033c8:	d013      	beq.n	4033f2 <task_modo+0x5a>
-		if(graus == 45){
-  4033ca:	2b2d      	cmp	r3, #45	; 0x2d
-  4033cc:	d022      	beq.n	403414 <task_modo+0x7c>
-	 	if(graus == 90){
-  4033ce:	2b5a      	cmp	r3, #90	; 0x5a
-  4033d0:	d1ee      	bne.n	4033b0 <task_modo+0x18>
+  4033b0:	e00e      	b.n	4033d0 <task_modo+0x38>
 			apaga_tela();
-  4033d2:	4b1d      	ldr	r3, [pc, #116]	; (403448 <task_modo+0xb0>)
-  4033d4:	4798      	blx	r3
-			gfx_mono_draw_string("90", 50, 12, &sysfont);
-  4033d6:	4b1d      	ldr	r3, [pc, #116]	; (40344c <task_modo+0xb4>)
-  4033d8:	220c      	movs	r2, #12
-  4033da:	2132      	movs	r1, #50	; 0x32
-  4033dc:	481c      	ldr	r0, [pc, #112]	; (403450 <task_modo+0xb8>)
-  4033de:	4c1d      	ldr	r4, [pc, #116]	; (403454 <task_modo+0xbc>)
-  4033e0:	47a0      	blx	r4
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-  4033e2:	2300      	movs	r3, #0
-  4033e4:	461a      	mov	r2, r3
-  4033e6:	4669      	mov	r1, sp
-  4033e8:	481b      	ldr	r0, [pc, #108]	; (403458 <task_modo+0xc0>)
-  4033ea:	6800      	ldr	r0, [r0, #0]
-  4033ec:	4c1b      	ldr	r4, [pc, #108]	; (40345c <task_modo+0xc4>)
-  4033ee:	47a0      	blx	r4
-			break;
-  4033f0:	e00e      	b.n	403410 <task_modo+0x78>
+  4033b2:	4b25      	ldr	r3, [pc, #148]	; (403448 <task_modo+0xb0>)
+  4033b4:	4798      	blx	r3
+			gfx_mono_draw_string("180", 50, 12, &sysfont);
+  4033b6:	4b25      	ldr	r3, [pc, #148]	; (40344c <task_modo+0xb4>)
+  4033b8:	220c      	movs	r2, #12
+  4033ba:	2132      	movs	r1, #50	; 0x32
+  4033bc:	4824      	ldr	r0, [pc, #144]	; (403450 <task_modo+0xb8>)
+  4033be:	4f25      	ldr	r7, [pc, #148]	; (403454 <task_modo+0xbc>)
+  4033c0:	47b8      	blx	r7
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
+  4033c2:	2300      	movs	r3, #0
+  4033c4:	461a      	mov	r2, r3
+  4033c6:	4669      	mov	r1, sp
+  4033c8:	4823      	ldr	r0, [pc, #140]	; (403458 <task_modo+0xc0>)
+  4033ca:	6800      	ldr	r0, [r0, #0]
+  4033cc:	4f23      	ldr	r7, [pc, #140]	; (40345c <task_modo+0xc4>)
+  4033ce:	47b8      	blx	r7
+    if (xQueueReceive(xQueueModo, &inc, 10)) {
+  4033d0:	2300      	movs	r3, #0
+  4033d2:	220a      	movs	r2, #10
+  4033d4:	f10d 0106 	add.w	r1, sp, #6
+  4033d8:	6828      	ldr	r0, [r5, #0]
+  4033da:	47a0      	blx	r4
+  4033dc:	2800      	cmp	r0, #0
+  4033de:	d0f7      	beq.n	4033d0 <task_modo+0x38>
+      int graus = inc;
+  4033e0:	f9bd 3006 	ldrsh.w	r3, [sp, #6]
+	  int passos = (graus / 0,17578125);
+  4033e4:	9600      	str	r6, [sp, #0]
+		if(graus == 180){
+  4033e6:	2bb4      	cmp	r3, #180	; 0xb4
+  4033e8:	d0e3      	beq.n	4033b2 <task_modo+0x1a>
+		if(graus == 45){
+  4033ea:	2b2d      	cmp	r3, #45	; 0x2d
+  4033ec:	d011      	beq.n	403412 <task_modo+0x7a>
+	 	if(graus == 90){
+  4033ee:	2b5a      	cmp	r3, #90	; 0x5a
+  4033f0:	d1ee      	bne.n	4033d0 <task_modo+0x38>
 			apaga_tela();
   4033f2:	4b15      	ldr	r3, [pc, #84]	; (403448 <task_modo+0xb0>)
   4033f4:	4798      	blx	r3
-			gfx_mono_draw_string("180", 50, 12, &sysfont);
+			gfx_mono_draw_string("90", 50, 12, &sysfont);
   4033f6:	4b15      	ldr	r3, [pc, #84]	; (40344c <task_modo+0xb4>)
   4033f8:	220c      	movs	r2, #12
   4033fa:	2132      	movs	r1, #50	; 0x32
   4033fc:	4818      	ldr	r0, [pc, #96]	; (403460 <task_modo+0xc8>)
-  4033fe:	4c15      	ldr	r4, [pc, #84]	; (403454 <task_modo+0xbc>)
-  403400:	47a0      	blx	r4
+  4033fe:	4f15      	ldr	r7, [pc, #84]	; (403454 <task_modo+0xbc>)
+  403400:	47b8      	blx	r7
 			xQueueSendFromISR(xQueueSteps, &passos, 0);
   403402:	2300      	movs	r3, #0
   403404:	461a      	mov	r2, r3
   403406:	4669      	mov	r1, sp
   403408:	4813      	ldr	r0, [pc, #76]	; (403458 <task_modo+0xc0>)
   40340a:	6800      	ldr	r0, [r0, #0]
-  40340c:	4c13      	ldr	r4, [pc, #76]	; (40345c <task_modo+0xc4>)
-  40340e:	47a0      	blx	r4
-}
-  403410:	b002      	add	sp, #8
-  403412:	bd70      	pop	{r4, r5, r6, pc}
+  40340c:	4f13      	ldr	r7, [pc, #76]	; (40345c <task_modo+0xc4>)
+  40340e:	47b8      	blx	r7
+  403410:	e7de      	b.n	4033d0 <task_modo+0x38>
 			apaga_tela();			
-  403414:	4b0c      	ldr	r3, [pc, #48]	; (403448 <task_modo+0xb0>)
-  403416:	4798      	blx	r3
+  403412:	4b0d      	ldr	r3, [pc, #52]	; (403448 <task_modo+0xb0>)
+  403414:	4798      	blx	r3
 			gfx_mono_draw_string("45", 50, 12, &sysfont);
-  403418:	4b0c      	ldr	r3, [pc, #48]	; (40344c <task_modo+0xb4>)
-  40341a:	220c      	movs	r2, #12
-  40341c:	2132      	movs	r1, #50	; 0x32
-  40341e:	4811      	ldr	r0, [pc, #68]	; (403464 <task_modo+0xcc>)
-  403420:	4c0c      	ldr	r4, [pc, #48]	; (403454 <task_modo+0xbc>)
-  403422:	47a0      	blx	r4
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-  403424:	2300      	movs	r3, #0
-  403426:	461a      	mov	r2, r3
-  403428:	4669      	mov	r1, sp
-  40342a:	480b      	ldr	r0, [pc, #44]	; (403458 <task_modo+0xc0>)
-  40342c:	6800      	ldr	r0, [r0, #0]
-  40342e:	4c0b      	ldr	r4, [pc, #44]	; (40345c <task_modo+0xc4>)
-  403430:	47a0      	blx	r4
-			break;}
-  403432:	e7ed      	b.n	403410 <task_modo+0x78>
+  403416:	4b0d      	ldr	r3, [pc, #52]	; (40344c <task_modo+0xb4>)
+  403418:	220c      	movs	r2, #12
+  40341a:	2132      	movs	r1, #50	; 0x32
+  40341c:	4811      	ldr	r0, [pc, #68]	; (403464 <task_modo+0xcc>)
+  40341e:	4f0d      	ldr	r7, [pc, #52]	; (403454 <task_modo+0xbc>)
+  403420:	47b8      	blx	r7
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
+  403422:	2300      	movs	r3, #0
+  403424:	461a      	mov	r2, r3
+  403426:	4669      	mov	r1, sp
+  403428:	480b      	ldr	r0, [pc, #44]	; (403458 <task_modo+0xc0>)
+  40342a:	6800      	ldr	r0, [r0, #0]
+  40342c:	4f0b      	ldr	r7, [pc, #44]	; (40345c <task_modo+0xc4>)
+  40342e:	47b8      	blx	r7
+  403430:	e7ce      	b.n	4033d0 <task_modo+0x38>
+  403432:	bf00      	nop
   403434:	0040324d 	.word	0x0040324d
   403438:	00400571 	.word	0x00400571
   40343c:	20400e30 	.word	0x20400e30
@@ -8155,11 +8152,11 @@ static void task_modo(void *pvParameters) {
   403444:	010c388d 	.word	0x010c388d
   403448:	00403231 	.word	0x00403231
   40344c:	2040000c 	.word	0x2040000c
-  403450:	00406854 	.word	0x00406854
+  403450:	0040684c 	.word	0x0040684c
   403454:	004004d9 	.word	0x004004d9
   403458:	20400e34 	.word	0x20400e34
   40345c:	00401c39 	.word	0x00401c39
-  403460:	0040684c 	.word	0x0040684c
+  403460:	00406854 	.word	0x00406854
   403464:	00406850 	.word	0x00406850
 
 00403468 <main>:
