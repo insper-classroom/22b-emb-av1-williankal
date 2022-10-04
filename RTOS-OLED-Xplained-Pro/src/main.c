@@ -39,7 +39,7 @@
 #define IN_3_PIO PIOC
 #define IN_3_PIO_ID ID_PIOC
 #define IN_3_IDX 19
-#define IN_3_IDX_MASK (1u << IN_4_IDX)
+#define IN_3_IDX_MASK (1u << IN_3_IDX)
 
 #define IN_4_PIO PIOA
 #define IN_4_PIO_ID ID_PIOA
@@ -162,16 +162,19 @@ static void task_modo(void *pvParameters) {
 
 		if(graus == 180){
 			apaga_tela();
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-			gfx_mono_draw_string("180", 50, 12, &sysfont);}
+			gfx_mono_draw_string("180", 50, 12, &sysfont);
+
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
 		if(graus == 45){
-			apaga_tela();
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
-			gfx_mono_draw_string("45", 50, 12, &sysfont);}
+			apaga_tela();			
+			gfx_mono_draw_string("45", 50, 12, &sysfont);
+			xQueueSendFromISR(xQueueSteps, &passos, 0);}
+
 	 	if(graus == 90){
 			apaga_tela();
-			xQueueSendFromISR(xQueueSteps, &passos, 0);
 			gfx_mono_draw_string("90", 50, 12, &sysfont);
+			xQueueSendFromISR(xQueueSteps, &passos, 0);
+
 		 }
     } 
 }
@@ -182,19 +185,20 @@ static void task_motor(void *pvParameters) {
   for (;;) {
 	if (xQueueReceive(xQueueSteps, &passos1, 10)) {
     	int passos = passos1;
-		RTT_init(1000, 5, RTT_MR_ALMIEN);
 		for (int i = 0; i < passos; i++) {
+			RTT_init(1000, 5, RTT_MR_ALMIEN);
+
 			// pio_set(IN_1_PIO, IN_1_IDX_MASK);
-			// delay_ms(50);
+			// delay_ms(10);
 			// pio_clear(IN_1_PIO, IN_1_IDX_MASK);
 			// pio_set(IN_2_PIO, IN_2_IDX_MASK);
-			// delay_ms(50);
+			// delay_ms(10);
 			// pio_clear(IN_2_PIO, IN_2_IDX_MASK);
 			// pio_set(IN_3_PIO, IN_3_IDX_MASK);
-			// delay_ms(50);
+			// delay_ms(10);
 			// pio_clear(IN_3_PIO, IN_3_IDX_MASK);
 			// pio_set(IN_4_PIO, IN_4_IDX_MASK);
-			// delay_ms(50);
+			// delay_ms(10);
 			// pio_clear(IN_4_PIO,IN_4_IDX_MASK);
 
 			if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {
