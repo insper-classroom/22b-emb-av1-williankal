@@ -179,13 +179,13 @@ static void task_motor(void *pvParameters) {
   for (;;) {
     if (xQueueReceive(xQueueSteps, &passos, 10)) {
       int passos = passos;
-	  RTT_init(1000, 5000, RTT_MR_ALMIEN);
-	  if(xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE){
-  			pio_set(IN_1_PIO, IN_1_IDX_MASK);
-			pio_clear(IN_1_PIO, IN_1_IDX_MASK);
-    } 
+	//   RTT_init(1, 5000000, RTT_MR_ALMIEN);
+	//   for (int i = 0; i < passos; i++) {
+    // 	if ( xSemaphoreTake(xSemaphoreRTT, 0) == pdTRUE ) {			
+    // } 
+// }
+}}
 }
-  }}
 
 /************************************************************************/
 /* funcoes                                                              */
